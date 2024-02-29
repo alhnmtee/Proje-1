@@ -1,20 +1,13 @@
-import requests
-from bs4 import BeautifulSoup
+from flask import Flask, jsonify
+app = Flask(__name__)
 
-# Web sayfasını iste
-url = 'https://scrapeme.live/shop'
-response = requests.get(url)
+@app.route('/')
+def home():
+    return "Anani Sikeyim ! "
 
-# HTML içeriğini al
-html_content = response.text
+@app.route('/api/anani' , methods=['GET'])
+def test():
+    return jsonify({"la ": "o"})
 
-# BeautifulSoup kullanarak HTML içeriğini işle
-soup = BeautifulSoup(html_content, 'html.parser')
-print (soup.prettify())
-
-# Örneğin, tüm başlıkları (h1 etiketleri) alalım
-basliklar = soup.find_all('a')
-
-# Başlıkları ekrana yazdır
-for baslik in basliklar:
-    print(baslik.text)
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -3,18 +3,45 @@ import pymongo
 from bs4 import BeautifulSoup
 
 
-#client = pymongo.MongoClient("mongodb+srv://yazlab:yazlab@cluster0.ier7hbc.mongodb.net/")
-#db = client["yazlab"]
-#collection = db["kaynak"]
+client = pymongo.MongoClient("mongodb+srv://yazlab:yazlab@cluster0.ier7hbc.mongodb.net/")
+db = client["yazlab"]
+collection = db["kaynak"]
+
+
+def save_to_mongodb(article_dict):
+    # MongoDB'ye kaydet
+    collection.insert_one(article_dict)
+    print("Veri MongoDB'ye başarıyla kaydedildi.")
 
 def dergiParkScraping(search_text,page):
     def scrapeInfo(link):
+        article_dict = {}
+
         linksoup =  BeautifulSoup(requests.get(link).text, 'html.parser')
-        article_title = linksoup.find('h3','article-title').get_text().strip()
+        title_element = linksoup.find('h3', 'article-title')
+
+        if title_element and len(title_element.get_text().strip()) > 2:
+            article_dict['title'] = title_element.get_text().strip()
         
-        article_authors = []
-        for author in linksoup.find('p','article-authors').find_all('a'):
-            article_authors.append(author.get_text().strip())
+        #TODO başlık ve özel almayan sayfalardan biri https://dergipark.org.tr/tr/pub/cbayarfbe/issue/41718/461839 neden olmadığını araştırmak gerek
+       
+        
+        if title_element and len(title_element.get_text().strip()) > 2:
+            article_dict['title'] = title_element.get_text().strip()
+
+            # Yazarları al
+            article_authors = []
+            for author in linksoup.find('p', 'article-authors').find_all('a'):
+                article_authors.append(author.get_text().strip())
+
+            if article_authors:
+                article_dict['authors'] = article_authors
+            else:
+                del article_dict['title']  # Başlık var ama yazar yoksa, article_dict'i sil
+
+        
+
+        #save_to_mongodb(article_dict)    
         
         article_type = linksoup.find('div','kt-portlet__head-label').get_text().strip()
         
@@ -29,11 +56,14 @@ def dergiParkScraping(search_text,page):
         article_summary = linksoup.find('div',class_ = 'article-abstract data-section').find('p').get_text().strip()
         
         article_referances = []
-        for referance in linksoup.find('div','article-citations data-section').find_all('li'):
-            article_referances.append(referance.get_text().strip())
-        
+        try:
+            for referance in linksoup.find('div','article-citations data-section').find_all('li'):
+                article_referances.append(referance.get_text().strip())
+        except:
+            print("referans yok")
+            
         #TODO yayın id ve alıntı sayısı doi numarası filan bunlar nolucak ? ve bunşarı veri tabanına atmak lazım
-        #article_citation_count = ??
+        #TODO article_citation_count = ??
         
         article_url = 'https://dergipark.org.tr' + linksoup.find('div',id = 'article-toolbar').find('a')['href']
         
@@ -59,10 +89,9 @@ def dergiParkScraping(search_text,page):
     
     
         
-search_text = 'prostate'
+search_text = 'cu'
 dergiParkScraping(search_text,1)
 
 
 #classı "gs_r gs_or gs_scl" olanlar arama sonuçlarının şeysi
 #classı "gs_r" de bunu mu demek istediniz şeyleri var
-

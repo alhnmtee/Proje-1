@@ -3,6 +3,7 @@ import pymongo
 from bs4 import BeautifulSoup
 
 
+
 client = pymongo.MongoClient("mongodb+srv://yazlab:yazlab@cluster0.ier7hbc.mongodb.net/")
 db = client["yazlab"]
 collection = db["kaynak"]
@@ -18,26 +19,34 @@ def dergiParkScraping(search_text,page):
         article_dict = {}
 
         linksoup =  BeautifulSoup(requests.get(link).text, 'html.parser')
-        title_element = linksoup.find('h3', 'article-title')
-
-        if title_element and len(title_element.get_text().strip()) > 2:
-            article_dict['title'] = title_element.get_text().strip()
+        title_element = linksoup.find_all('h3', 'article-title')
+        article_title = ""
+        for title in title_element:
+            if(len(title['aria-label']) > 16):
+                article_title=title
+        
+        print(article_title.get_text().strip() + link)
+     
+        #TODO yorum satırlı kısımlar yeniden yazılacak yukarıdaki article_title bulma şekline göre
+     
+       # if title_element and len(title_element.get_text().strip()) > 2:
+          #  article_dict['title'] = title_element.get_text().strip()
         
         #TODO başlık ve özel almayan sayfalardan biri https://dergipark.org.tr/tr/pub/cbayarfbe/issue/41718/461839 neden olmadığını araştırmak gerek
        
         
-        if title_element and len(title_element.get_text().strip()) > 2:
-            article_dict['title'] = title_element.get_text().strip()
+       # if title_element and len(title_element.get_text().strip()) > 2:
+         #   article_dict['title'] = title_element.get_text().strip()
 
             # Yazarları al
-            article_authors = []
-            for author in linksoup.find('p', 'article-authors').find_all('a'):
-                article_authors.append(author.get_text().strip())
+          #  article_authors = []
+          #  for author in linksoup.find('p', 'article-authors').find_all('a'):
+          #      article_authors.append(author.get_text().strip())
 
-            if article_authors:
-                article_dict['authors'] = article_authors
-            else:
-                del article_dict['title']  # Başlık var ama yazar yoksa, article_dict'i sil
+           # if article_authors:
+           #     article_dict['authors'] = article_authors
+           # else:
+           #     del article_dict['title']  # Başlık var ama yazar yoksa, article_dict'i sil
 
         
 

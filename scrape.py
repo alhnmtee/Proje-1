@@ -22,8 +22,8 @@ def dergiParkScraping(search_text,page):
         title_element = linksoup.find_all('h3', 'article-title')
         article_title = ""
         for title in title_element:
-            if(len(title['aria-label']) > 16):
-                article_title=title
+            if(len(title['aria-label']) > 16): # <h3 class="article-title" aria-label="Makale Başlığı: "> bu şekilde ekstra eleman yüzünden patlıyor "Makale Başlığı: " buu 16 karakter , 
+                article_title=title             #16 dan büyük olanı alıyoruz
         
         print(article_title.get_text().strip() + link)
      

@@ -1,5 +1,7 @@
+import scrape
 from flask_cors import CORS
 from flask import Flask, jsonify, request
+
 app = Flask(__name__)
 
 CORS(app)
@@ -14,7 +16,10 @@ def receive_data():
     received_text = data.get('text')  # Extract the 'text' field
     # Do something with the received text
     print('Received text:', received_text)
+    scrape.dergiParkScraping(received_text,1)
     return jsonify({'message': 'Data received successfully'})
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)

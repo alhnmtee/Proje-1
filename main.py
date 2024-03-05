@@ -12,9 +12,8 @@ def test():
 
 @app.route('/api/searchwords', methods=['POST'])
 def receive_data():
-    data = request.json  # Get the JSON data from the request body
-    received_text = data.get('text')  # Extract the 'text' field
-    # Do something with the received text
+    data = request.json  
+    received_text = data.get('text')  
     print('Received text:', received_text)
     scrape.dergiParkScraping(received_text,1)
     return jsonify({'message': 'Data received successfully'})

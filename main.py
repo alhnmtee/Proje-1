@@ -3,6 +3,10 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 import esTest
 from bson.json_util import dumps
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 app = Flask(__name__)
 

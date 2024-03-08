@@ -6,6 +6,7 @@ import './App.css'
 
 function App() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   
 =======
   interface SearchResult {
@@ -28,6 +29,9 @@ function App() {
   // Filtered results based on filters
  
 >>>>>>> Stashed changes
+=======
+  
+>>>>>>> Stashed changes
   useEffect(() => {
     fetch('/api/searchresults')
       .then(response => response.json())
@@ -40,9 +44,12 @@ function App() {
   }, []);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 
   
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   const [inputText, setInputText] = useState('');
 
@@ -72,6 +79,7 @@ function App() {
     });
   };
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
   //Filtre yapılan verilerin kaydedilmesi ve jsona çevrilmesi
@@ -117,6 +125,8 @@ function App() {
 
   
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   return (
     <div>
        {/* Filter inputs */}
@@ -135,6 +145,7 @@ function App() {
      
       <input type="text" value={inputText} onChange={handleInputChange} />
       <button onClick={sendDataToServer}>Send Data</button>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
 
@@ -156,6 +167,8 @@ function App() {
 </ul>
 
       
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     </div>
   );

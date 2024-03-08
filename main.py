@@ -2,11 +2,9 @@ import scrape
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 import esTest
+import filtersEs
 from bson.json_util import dumps
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 
 app = Flask(__name__)
 
@@ -25,6 +23,13 @@ def receive_data():
     return jsonify({'message': 'Data received successfully'})
     
 
+@app.route('/api/filters', methods=['POST'])
+def filter_data():
+     data = request.json
+     print("Received filter data:", data)
+     filtersEs.run_elasticsearch_query(data)
+     return jsonify({'message': 'Filter data received successfully'})
+     
 
 if __name__ == '__main__':
     app.run(debug=True)

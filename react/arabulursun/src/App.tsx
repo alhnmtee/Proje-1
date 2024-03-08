@@ -8,12 +8,11 @@ import { json } from 'react-router-dom';
 function App() {
   interface SearchResult {
     id: number; // Ensure 'id' is also included in the interface
+    title: string;
     link: string;
   }
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-<<<<<<< Updated upstream
-=======
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [titleFilter, setTitleFilter] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string | null>(null);
@@ -26,7 +25,6 @@ function App() {
 
   // Filtered results based on filters
  
->>>>>>> Stashed changes
   useEffect(() => {
     fetch('/api/searchresults')
       .then(response => response.json())
@@ -42,11 +40,8 @@ function App() {
         console.error('Error fetching data:', error);
       });
   }, []);
-<<<<<<< Updated upstream
-=======
 
 
->>>>>>> Stashed changes
   
   const [inputText, setInputText] = useState('');
 
@@ -75,9 +70,6 @@ function App() {
       console.error('Error sending data:', error);
     });
   };
-<<<<<<< Updated upstream
-  
-=======
 
   //Filtre yapılan verilerin kaydedilmesi ve jsona çevrilmesi
   const handleFilter = () => {
@@ -121,9 +113,22 @@ function App() {
   
 
   
->>>>>>> Stashed changes
   return (
     <div>
+       {/* Filter inputs */}
+       <div>
+        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+          <option value="">Type</option>
+          <option value="Araştırma Makalesi">Araştırma Makalesi</option>
+          <option value="Derleme">Derleme</option>
+          <option value="Diğer">Diğer</option>
+        </select>
+        <input type="text" value={titleFilter} onChange={(e) => setTitleFilter(e.target.value)} placeholder="Title" />
+        <input type="text" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} placeholder="Date" />
+        <input type="text" value={keywordsFilter} onChange={(e) => setKeywordsFilter(e.target.value)} placeholder="Keywords" />
+        <button onClick={handleFilter}>Filtrele</button>
+      </div>
+     
       <input type="text" value={inputText} onChange={handleInputChange} />
       <button onClick={sendDataToServer}>Send Data</button>
 
@@ -132,12 +137,13 @@ function App() {
       {searchResults.map((item, index) => (
   <li key={index}>
     {item.link ? (
-      <a href={item.link}>{item.link}</a>
+      <a href={item.link} target="_blank">{item.link}</a>
     ) : (
       <span>{item.link}</span>
     )}
   </li>
 ))}
+
 
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const newpage = () => {
+const Newpage = () => {
   return (
     <div>
       {/* Boş sayfa içeriği */}
@@ -10,4 +10,4 @@ const newpage = () => {
   );
 };
 
-export default newpage;
+export default Newpage;

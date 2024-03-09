@@ -57,6 +57,8 @@ def dergiParkScraping(search_text,page):
         #article_journal_title = linksoup.find('h1',id='journal-title').get_text().strip()
         article_dict['journal_title'] =linksoup.find('h1',id='journal-title').get_text().strip()
         
+        article_dict['_id']=linksoup.find('h1',id='journal-title').get_text().strip()
+        
         article_keywords = []
         for keyword in linksoup.find('div','article-keywords data-section').find_all('a'):
             article_keywords.append(keyword.get_text().strip())

@@ -144,7 +144,7 @@ function App() {
       <ul>
       {searchResults.map((item, index) => (
   <li key={index}>
-    <a href={item.link} target="_blank">{item.link}</a>
+    <a href={'article/'+item.link} target="_blank">{item.link}</a>
   </li>
 ))}
 

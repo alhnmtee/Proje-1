@@ -12,7 +12,8 @@ CORS(app)
 
 @app.route('/api/searchresults')
 def test():
-    return (dumps(esTest.urls))
+    #return esTest
+    return (dumps(esTest.titles))
 
 @app.route('/api/searchwords', methods=['POST'])
 def receive_data():

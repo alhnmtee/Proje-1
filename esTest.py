@@ -16,8 +16,8 @@ es = Elasticsearch('http://localhost:9200')
 #     document_id = document.pop('_id')  # _id alanını belgeden çıkarın
 #     es.index(index='your_elasticsearch_index', id=document_id, body=dumps(document))
 
-
-# result = es.search(index='your_elasticsearch_index', body={
+#print("Elasticsearch endeksine başarıyla veri eklendi.")
+# result1 = es.search(index='your_elasticsearch_index', body={
 #    "query": {
 #        "bool": {
 #            "must": [
@@ -27,28 +27,34 @@ es = Elasticsearch('http://localhost:9200')
 #        }
 #    }
 # })
+# print("Arama Sonuçları:")
+# for hit in result1['hits']['hits']:
+#     print(hit['_source'])
+    
 
 result = es.search(index='your_elasticsearch_index', body={
    "query": {
        "bool": {
            "must": [
-               {"match": {"title": "data"}}
+               #{"match": {"match_all"}},
+               #{"match": {"title": "health"}}
            ]
        }
    },
-   "_source": ["url"] # Sadece URL'leri getir
+   #"_source": ["url"] # Sadece URL'leri getir
+   "size": 24
 })
 
 # URL'leri almak için döngü
-urls = [hit['_source']['url'] for hit in result['hits']['hits']]
-for url in urls:
-    print(url)
+titles = [hit['_source']['title'] for hit in result['hits']['hits']]
+for title in titles:
+    print(title)
 
-#response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
-# Silinen belgelerin sayısını yazdırın
-#print("Silinen Belgelerin Sayısı:", response['deleted'])
+# response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
+# #Silinen belgelerin sayısını yazdırın
+# print("Silinen Belgelerin Sayısı:", response['deleted'])
 
-# Sonuçları yazdırın
+#Sonuçları yazdırın
 # print("Arama Sonuçları:")
 # for hit in result['hits']['hits']:
 #     print(hit['_source'])

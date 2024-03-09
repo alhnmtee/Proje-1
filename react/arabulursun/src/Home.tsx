@@ -1,14 +1,14 @@
 import { useInsertionEffect, useState } from 'react'
 import { useEffect } from 'react'
 import './App.css'
-import { json } from 'react-router-dom';
-import newPage from './newPage';
+import { Link, json } from 'react-router-dom';
 
 
 
 
 
-function App() {
+
+function home()  {
   interface SearchResult {
     id: number; // Ensure 'id' is also included in the interface
     title: string;
@@ -22,7 +22,6 @@ function App() {
   const [keywordsFilter, setKeywordsFilter] = useState<string>('');
   const [authorFilter, setAuthorFilter] = useState<string>('');
 
-  
 
 
   useEffect(() => {
@@ -143,9 +142,9 @@ function App() {
       <h1>Search Results</h1>
       <ul>
       {searchResults.map((item, index) => (
-  <li key={index}>
-    <a href={item.link} target="_blank">{item.link}</a>
-  </li>
+ <li key={index}>
+ <Link to="/newPage" target="_blank" rel="noopener noreferrer">{item.link}</Link>
+</li>
 ))}
 
 
@@ -160,4 +159,4 @@ function App() {
   );
 }
 
-export default App
+export default home

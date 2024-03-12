@@ -1,17 +1,16 @@
-import { useInsertionEffect, useState } from 'react'
-import { useEffect } from 'react'
-import './App.css'
-import { json } from 'react-router-dom';
-import newPage from './newPage';
-
-
-
-
+import React, { useState, useEffect } from 'react';
 
 function App() {
   interface SearchResult {
     id: number; // Ensure 'id' is also included in the interface
     title: string;
+    link: string;
+  }
+  interface Filter {
+    type: string;
+    title: string;
+    date: string;
+    keywords: string;
     link: string;
   }
 
@@ -21,16 +20,9 @@ function App() {
   const [dateFilter, setDateFilter] = useState<string | null>(null);
   const [keywordsFilter, setKeywordsFilter] = useState<string>('');
   const [authorFilter, setAuthorFilter] = useState<string>('');
+  const [jsonData, setJsonData] = useState<Filter[]>([]);
+  const [inputText, setInputText] = useState<string>('');
 
-  
-
-
-  useEffect(() => {
-    // Fetch data and set search results here
-  }, []); // useEffect dependency array
-
-  // Filtered results based on filters
- 
   useEffect(() => {
     fetch('/api/searchresults')
       .then(response => response.json())
@@ -41,15 +33,12 @@ function App() {
           link: link
         }));
         setSearchResults(searchResultObjects);
+        console.log('Response from server:1', data);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-
-  
-  const [inputText, setInputText] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
@@ -63,21 +52,20 @@ function App() {
       },
       body: JSON.stringify({ text: inputText }),
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Response from server:', data);
-    })
-    .catch(error => {
-      console.error('Error sending data:', error);
-    });
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response from server:', data);
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
   };
 
-  //Filtre yapılan verilerin kaydedilmesi ve jsona çevrilmesi
   const handleFilter = () => {
     const filters = {
       type: typeFilter,
@@ -85,7 +73,7 @@ function App() {
       date: dateFilter,
       keywords: keywordsFilter
     };
-  
+
     const jsonData = JSON.stringify(filters);
     fetch('/api/filters', {
       method: 'POST',
@@ -94,36 +82,39 @@ function App() {
       },
       body: jsonData,
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(jsonData => {
-      console.log('Response from server:', jsonData);
-    })
-    .catch(error => {
-      console.error('Error sending data:', error);
-    });
-   
-  
-    // Filtre değerlerini temizle
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(jsonData => {
+        // Veriyi işle ve uygun yapıya dönüştür
+        const searchResultObjects = jsonData.map((item, index) => ({
+          id: index,
+          title: item.title,
+          link: item.title
+        }));
+      
+        // Arayüzü güncelle
+        setSearchResults(searchResultObjects);
+        console.log('Response from server:', jsonData);
+      })
+      
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+
     setTypeFilter("");
     setTitleFilter("");
     setDateFilter("");
     setKeywordsFilter("");
     setAuthorFilter("");
   };
-  
-  
-  
 
-  
   return (
-    <div>
-       {/* Filter inputs */}
-       <div>
+    <div >
+      <div >
         <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
           <option value="">Type</option>
           <option value="Araştırma Makalesi">Araştırma Makalesi</option>
@@ -136,28 +127,22 @@ function App() {
         <input type="text" value={authorFilter} onChange={(e) => setAuthorFilter(e.target.value)} placeholder="Author" />
         <button onClick={handleFilter}>Filtrele</button>
       </div>
-     
-      <input type="text" value={inputText} onChange={handleInputChange} />
-      <button onClick={sendDataToServer}>Send Data</button>
 
-      <h1>Search Results</h1>
-      <ul>
-      {searchResults.map((item, index) => (
-  <li key={index}>
-    <a href={'article/'+item.link} target="_blank">{item.link}</a>
-  </li>
-))}
+      <div >
+        <input type="text" value={inputText} onChange={handleInputChange} />
+        <button onClick={sendDataToServer}>Send Data</button>
+      </div>
 
-
-
-
-
-</ul>
-
-      
+      <h1 >Search Results</h1>
+      <ul >
+        {searchResults.map((item, index) => (
+          <li key={index}>
+            <a href={'article/' + item.link} target="_blank">{item.link}</a>
+          </li>
+        ))}
+      </ul>
     </div>
-    
   );
 }
 
-export default App
+export default App;

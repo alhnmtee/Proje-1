@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 import esTest
 import filtersEs
+import newpage
 from bson.json_util import dumps
 
 
@@ -28,9 +29,20 @@ def receive_data():
 def filter_data():
      data = request.json
      print("Received filter data:", data)
-     filtersEs.run_elasticsearch_query(data)
-     return jsonify({'message': 'Filter data received successfully'})
+     veri= filtersEs.run_elasticsearch_query(data)
+     print("Filtered data:", veri)
      
+     return jsonify(veri)
+     
+@app.route('/api/url', methods=['POST'])
+def url_data():
+    data = request.json
+    data = data.get('text')
+    cleaned_url = data.replace('/article/', '').replace('%20', ' ')
+    #print("Cleaned URL:", cleaned_url)
+    bilgi = newpage.get_newpage_data(cleaned_url)
+    return jsonify({'message': bilgi})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

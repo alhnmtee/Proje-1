@@ -27,9 +27,13 @@ def run_elasticsearch_query(filter_data):
         query["query"]["bool"]["must"].append({"match": {"date": filter_data['date']}})
     if filter_data['keywords']:
         query["query"]["bool"]["must"].append({"match": {"keywords": filter_data['keywords']}})
+    
 
     
     result = es.search(index='your_elasticsearch_index', body=query)
-    print("Elasticsearch sorgusu sonucu:", result)
+    #print("Elasticsearch sorgusu sonucu:", result)
+    sources = [hit['_source'] for hit in result['hits']['hits']]
+    #print("Filtered data:", sources)
+    return sources
 
 

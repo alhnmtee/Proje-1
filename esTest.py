@@ -47,8 +47,8 @@ result = es.search(index='your_elasticsearch_index', body={
 
 # URL'leri almak için döngü
 titles = [hit['_source']['title'] for hit in result['hits']['hits']]
-for title in titles:
-    print(title)
+#for title in titles:
+    #print(title)   
 
 # response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
 # #Silinen belgelerin sayısını yazdırın

@@ -1,6 +1,8 @@
+from json import dumps
 import requests
 import pymongo
 from bs4 import BeautifulSoup
+from elasticsearch import Elasticsearch
 
 #TODO ElasticSearch araştırdım bi hesap açtım güya bir şeyler denedim ama sync aşaması hata verdi tamamlayamadım.Yapamadım
 
@@ -9,11 +11,13 @@ client = pymongo.MongoClient("mongodb+srv://yazlab:yazlab@cluster0.ier7hbc.mongo
 db = client["yazlab"]
 collection = db["kaynak"]
 
+es = Elasticsearch('http://localhost:9200')
+
 
 def save_to_mongodb(article_dict):
     # MongoDB'ye kaydet
     collection.insert_one(article_dict)
-    #print("Veri MongoDB'ye başarıyla kaydedildi.")
+
 
 def dergiParkScraping(search_text,page):
     def scrapeInfo(link):
@@ -60,9 +64,13 @@ def dergiParkScraping(search_text,page):
         article_dict['_id']=linksoup.find('h1',id='journal-title').get_text().strip()
         
         article_keywords = []
-        for keyword in linksoup.find('div','article-keywords data-section').find_all('a'):
-            article_keywords.append(keyword.get_text().strip())
-            article_dict['keywords'] = article_keywords
+        try:
+            for keyword in linksoup.find('div','article-keywords data-section').find_all('a'):
+                article_keywords.append(keyword.get_text().strip())
+                article_dict['keywords'] = article_keywords
+        except:
+            print("anahtar kelime yok")
+
         
         #article_summary = linksoup.find('div',class_ = 'article-abstract data-section').find('p').get_text().strip()
         #article_dict['summary'] = linksoup.find('div',class_ = 'article-abstract data-section').find('p').get_text().strip()
@@ -100,7 +108,11 @@ def dergiParkScraping(search_text,page):
 
         
         #print("*** ***" + str(article_dict['summary']))
-        save_to_mongodb(article_dict)
+        try:
+            save_to_mongodb(article_dict)
+        except:
+            print("Veri kaydedilemedi")
+            pass
 
     url = 'https://dergipark.org.tr/tr/search/'+str(page)+'?q='+search_text+'&section=articles'
     response = requests.get(url)
@@ -117,7 +129,9 @@ def dergiParkScraping(search_text,page):
     for link in article_links:
         scrapeInfo(link)
     
-    
+    for document in collection.find():
+        document_id = document.pop('_id')  # _id alanını belgeden çıkarın
+        es.index(index='your_elasticsearch_index', id=document_id, body=dumps(document))
     
     
 

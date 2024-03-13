@@ -56,27 +56,23 @@ const Newpage = () => {
     });
   };
 
-  return (
-    <div>
-      {/* Boş sayfa içeriği */}
-      <h2>Search results</h2>
+   return (
+    <div className="newpage">
+      <h1>Arama Sonuçları</h1>
       <ul>
         {searchResults.map((data) => (
           <li key={data.id}>
-            <a href={data.link}>{data.title}</a>
-            <p>Authors: {data.authors.join(', ')}</p>
-            <p>Date: {data.date}</p>
-            <p>Journal: {data.journal_title}</p>
-            <p>Keywords: {data.keywords.join(', ')}</p>
-            <p>Summary: {data.summary}</p>
-            {/* <p>References: {data.references.join(', ')}</p> */}
-            <p>URL: 
-             <a href={data.url}>{data.url}</a> </p>
-
+            <h2><a href={data.link}>{data.title}</a></h2>
+            <p className="authors">Yazarlar: {data.authors.join(", ")}</p>
+            <p className="date">Tarih: {data.date}</p>
+            <p className="journal_title">Dergi: {data.journal_title}</p>
+            <p className="keywords">Anahtar Kelimeler: {data.keywords.join(", ")}</p>
+            <p className="summary">{data.summary}</p>
+            <p>URL: <a href={data.url}>{data.url}</a></p>
+            
           </li>
         ))}
       </ul>
-
     </div>
   );
 };

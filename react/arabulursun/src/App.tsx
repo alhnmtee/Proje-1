@@ -115,14 +115,14 @@ function App() {
   return (
     <div >
       <div >
-        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+        <select value={typeFilter || ""} onChange={(e) => setTypeFilter(e.target.value)}>
           <option value="">Type</option>
           <option value="Araştırma Makalesi">Araştırma Makalesi</option>
           <option value="Derleme">Derleme</option>
           <option value="Diğer">Diğer</option>
         </select>
         <input type="text" value={titleFilter} onChange={(e) => setTitleFilter(e.target.value)} placeholder="Title" />
-        <input type="text" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} placeholder="Date" />
+        <input type="text" value={dateFilter || ""} onChange={(e) => setDateFilter(e.target.value)} placeholder="Date" />
         <input type="text" value={keywordsFilter} onChange={(e) => setKeywordsFilter(e.target.value)} placeholder="Keywords" />
         <input type="text" value={authorFilter} onChange={(e) => setAuthorFilter(e.target.value)} placeholder="Author" />
         <button onClick={handleFilter}>Filtrele</button>

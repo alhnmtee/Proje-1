@@ -42,7 +42,7 @@ result = es.search(index='your_elasticsearch_index', body={
        }
    },
    #"_source": ["url"] # Sadece URL'leri getir
-   "size": 24
+   "size": 300
 })
 
 # URL'leri almak için döngü
@@ -50,9 +50,9 @@ titles = [hit['_source']['title'] for hit in result['hits']['hits']]
 #for title in titles:
     #print(title)   
 
-# response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
-# #Silinen belgelerin sayısını yazdırın
-# print("Silinen Belgelerin Sayısı:", response['deleted'])
+#response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
+# Silinen belgelerin sayısını yazdırın
+#print("Silinen Belgelerin Sayısı:", response['deleted'])
 
 #Sonuçları yazdırın
 # print("Arama Sonuçları:")

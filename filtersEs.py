@@ -16,7 +16,7 @@ def run_elasticsearch_query(filter_data):
                 "must": []
             }
         },
-       
+       "size": 100
     }
 
     if filter_data['type']:

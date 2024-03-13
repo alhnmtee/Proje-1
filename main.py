@@ -30,8 +30,7 @@ def filter_data():
      data = request.json
      print("Received filter data:", data)
      veri= filtersEs.run_elasticsearch_query(data)
-     print("Filtered data:", veri)
-     
+     #print("Filtered data:", veri)
      return jsonify(veri)
      
 @app.route('/api/url', methods=['POST'])

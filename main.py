@@ -1,6 +1,6 @@
 import scrape
 from flask_cors import CORS
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 import esTest
 import filtersEs
 import newpage
@@ -10,6 +10,7 @@ from bson.json_util import dumps
 app = Flask(__name__)
 
 CORS(app)
+
 
 @app.route('/api/searchresults')
 def test():

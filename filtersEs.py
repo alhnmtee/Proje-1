@@ -18,7 +18,7 @@ def run_elasticsearch_query(filter_data):
         },
        "size": 100
     }
-
+    print("Filter data:", filter_data)
     if filter_data['type']:
         query["query"]["bool"]["must"].append({"match": {"type": filter_data['type']}})
     if filter_data['title']:
@@ -27,6 +27,10 @@ def run_elasticsearch_query(filter_data):
         query["query"]["bool"]["must"].append({"match": {"date": filter_data['date']}})
     if filter_data['keywords']:
         query["query"]["bool"]["must"].append({"match": {"keywords": filter_data['keywords']}})
+    if filter_data['authors']:
+        query["query"]["bool"]["must"].append({"match": {"authors": filter_data['authors']}})
+
+    
     
 
     

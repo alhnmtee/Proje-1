@@ -71,7 +71,8 @@ function App() {
       type: typeFilter,
       title: titleFilter,
       date: dateFilter,
-      keywords: keywordsFilter
+      keywords: keywordsFilter,
+      authors: authorFilter
     };
 
     const jsonData = JSON.stringify(filters);

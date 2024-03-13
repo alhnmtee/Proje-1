@@ -6,9 +6,10 @@ const Root = () => {
   return (
     <div className='Root'>
       {/* Boş sayfa içeriği */}
-      <h1>Ara Bulursun
-      <Link className='link' to="/">Home</Link>
-      </h1>
+      <h1 className='h1'>
+      
+      <Link className='link' to="/">Ara Bulursun Akademik</Link>
+    </h1>
             
             <Outlet></Outlet>
           </div>

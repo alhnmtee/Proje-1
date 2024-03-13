@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'; 
@@ -56,20 +57,26 @@ const Newpage = () => {
     });
   };
 
-   return (
+  return (
     <div className="newpage">
-      <h1>Arama Sonuçları</h1>
       <ul>
         {searchResults.map((data) => (
-          <li key={data.id}>
-            <h2><a href={data.link}>{data.title}</a></h2>
-            <p className="authors">Yazarlar: {data.authors.join(", ")}</p>
-            <p className="date">Tarih: {data.date}</p>
-            <p className="journal_title">Dergi: {data.journal_title}</p>
-            <p className="keywords">Anahtar Kelimeler: {data.keywords.join(", ")}</p>
-            <p className="summary">{data.summary}</p>
-            <p>URL: <a href={data.url}>{data.url}</a></p>
-            
+          <li key={data.id} className="card">
+            <div className="card-body">
+              <h2 className="card-title"><a href={data.link}>{data.title}</a></h2>
+              <p className="card-text authors">Yazarlar: {data.authors.join(", ")}</p>
+              <p className="card-text date">Tarih: {data.date}</p>
+            </div>
+            <p className="card-text journal_title">Dergi: {data.journal_title}</p>
+            <div className="card-body summary">
+              {data.summary}
+            </div>
+            <p className="card-text keywords">
+              {data.keywords.map((keyword) => (
+                <span key={keyword} className="badge badge-primary">{keyword}</span>
+              ))}
+            </p>
+            <a href={data.url} className="btn btn-primary">PDF URL</a>
           </li>
         ))}
       </ul>

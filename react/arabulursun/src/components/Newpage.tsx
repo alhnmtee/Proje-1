@@ -1,10 +1,7 @@
-
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'; 
-import '../index.css';
-import 'animate.css';
-
 
 const Newpage = () => {
 
@@ -62,10 +59,6 @@ const Newpage = () => {
 
   return (
     <div className="newpage">
-      <div className="book-animation">
-      <img src="../../public/pikachu.png"  className="animate__animated animate__slideInLeft" />
-      <img src="../../public/gotcha.png"  className="animate__animated animate__slideInRight" />
-    </div>
       <ul>
         {searchResults.map((data) => (
           <li key={data.id} className="card">
@@ -78,14 +71,12 @@ const Newpage = () => {
             <div className="card-body summary">
               {data.summary}
             </div>
-            <p className="card-text keywords">Keywords: 
+            <p className="card-text keywords">
               {data.keywords.map((keyword) => (
                 <span key={keyword} className="badge badge-primary">{keyword}</span>
               ))}
             </p>
             <a href={data.url} className="btn btn-primary">PDF URL</a>
-            
-    
           </li>
         ))}
       </ul>

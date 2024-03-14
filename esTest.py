@@ -50,7 +50,7 @@ titles = [hit['_source']['title'] for hit in result['hits']['hits']]
 #for title in titles:
     #print(title)   
 
-#response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
+response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
 # Silinen belgelerin sayısını yazdırın
 #print("Silinen Belgelerin Sayısı:", response['deleted'])
 

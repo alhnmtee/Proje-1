@@ -11,19 +11,24 @@ app = Flask(__name__)
 
 CORS(app)
 
-
 @app.route('/api/searchresults')
 def test():
     #return esTest
     return (dumps(esTest.titles))
 
+
+
 @app.route('/api/searchwords', methods=['POST'])
 def receive_data():
     data = request.json  
     received_text = data.get('text')  
+    pages = data.get('pages')
     print('Received text:', received_text)
-    scrape.dergiParkScraping(received_text,1)
-    return jsonify({'message': 'Data received successfully'})
+    scrape.dergiParkScraping(received_text,pages)
+    scrape.googleScholarScraping(received_text,pages)
+    
+
+    return jsonify({'message': data})
     
 
 @app.route('/api/filters', methods=['POST'])
@@ -42,7 +47,6 @@ def url_data():
     #print("Cleaned URL:", cleaned_url)
     bilgi = newpage.get_newpage_data(cleaned_url)
     return jsonify({'message': bilgi})
-    
 
 if __name__ == '__main__':
     app.run(debug=True)

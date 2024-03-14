@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Root from './components/Root';
 
 function App() {
   interface SearchResult {
@@ -22,6 +23,7 @@ function App() {
   const [authorFilter, setAuthorFilter] = useState<string>('');
   const [jsonData, setJsonData] = useState<Filter[]>([]);
   const [inputText, setInputText] = useState<string>('');
+  const [pages,setpages] = useState<number>(1);
 
   useEffect(() => {
     fetch('/api/searchresults')
@@ -43,23 +45,29 @@ function App() {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
   };
-
+  
+  const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setpages(parseInt(event.target.value));
+  };
   const sendDataToServer = () => {
     fetch('/api/searchwords', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: inputText }),
+      body: JSON.stringify({ text: inputText , pages : pages }),
     })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        
         return response.json();
       })
-      .then(data => {
-        console.log('Response from server:', data);
+      .then(data => { 
+        console.log('Response from server:2', data);
+     
+
       })
       .catch(error => {
         console.error('Error sending data:', error);
@@ -99,7 +107,7 @@ function App() {
       
         // Arayüzü güncelle
         setSearchResults(searchResultObjects);
-        console.log('Response from server:', jsonData);
+        console.log('Response from server:3', jsonData);
       })
       
       .catch(error => {
@@ -131,6 +139,7 @@ function App() {
 
       <div >
         <input type="text" value={inputText} onChange={handleInputChange} />
+        <input type="number" value = {pages} min={1} onChange={handlePageChange}/>
         <button onClick={sendDataToServer}>Send Data</button>
       </div>
 

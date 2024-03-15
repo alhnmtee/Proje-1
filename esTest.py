@@ -12,9 +12,22 @@ es = Elasticsearch('http://localhost:9200')
 
 #Her veri atıldığnda çalışacak sadece :D:D:D:D
 # MongoDB koleksiyonundaki belgeleri alın ve Elasticsearch endeksine ekleyin
-# for document in mongo_collection.find():
-#     document_id = document.pop('_id')  # _id alanını belgeden çıkarın
-#     es.index(index='your_elasticsearch_index', id=document_id, body=dumps(document))
+
+# index_mapping = {
+#     "mappings": {
+#         "properties": {
+#             "date": {
+#                 "type": "keyword"  # Date alanını keyword olarak tanımla
+#             }
+#         }
+#     }
+# }
+# es.indices.create(index='your_elasticsearch_index', body=index_mapping)
+for document in mongo_collection.find():
+    document_id = document.pop('_id')  # _id alanını belgeden çıkarın
+    es.index(index='your_elasticsearch_index', id=document_id, body=dumps(document))
+
+
 
 #print("Elasticsearch endeksine başarıyla veri eklendi.")
 # result1 = es.search(index='your_elasticsearch_index', body={
@@ -50,9 +63,9 @@ titles = [hit['_source']['title'] for hit in result['hits']['hits']]
 #for title in titles:
     #print(title)   
 
-response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
-# Silinen belgelerin sayısını yazdırın
-#print("Silinen Belgelerin Sayısı:", response['deleted'])
+# response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
+# # Silinen belgelerin sayısını yazdırın
+# print("Silinen Belgelerin Sayısı:", response['deleted'])
 
 #Sonuçları yazdırın
 # print("Arama Sonuçları:")

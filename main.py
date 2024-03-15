@@ -25,7 +25,7 @@ def receive_data():
     pages = data.get('pages')
     print('Received text:', received_text)
     scrape.dergiParkScraping(received_text,pages)
-    scrape.googleScholarScraping(received_text,pages)
+    #scrape.googleScholarScraping(received_text,pages)
     
 
     return jsonify({'message': data})

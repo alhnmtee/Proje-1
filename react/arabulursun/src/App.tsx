@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Root from './components/Root';
+
 
 function App() {
   interface SearchResult {
-    id: number; // Ensure 'id' is also included in the interface
+    date: string | number | Date;
+    id: number; 
     title: string;
     link: string;
   }
@@ -13,6 +14,8 @@ function App() {
     date: string;
     keywords: string;
     link: string;
+    url: string;
+    sortOrder: string;
   }
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -24,6 +27,9 @@ function App() {
   const [jsonData, setJsonData] = useState<Filter[]>([]);
   const [inputText, setInputText] = useState<string>('');
   const [pages,setpages] = useState<number>(1);
+  const [filterSuccess, setFilterSuccess] = useState(false); 
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  
 
   useEffect(() => {
     fetch('/api/searchresults')
@@ -66,7 +72,8 @@ function App() {
       })
       .then(data => { 
         console.log('Response from server:2', data);
-     
+        setTitleFilter(inputText);
+        handleFilter();
 
       })
       .catch(error => {
@@ -80,8 +87,17 @@ function App() {
       title: titleFilter,
       date: dateFilter,
       keywords: keywordsFilter,
-      authors: authorFilter
-    };
+      authors: authorFilter,
+      sortOrder: sortOrder
+      
+      
+    }
+    setFilterSuccess(true); 
+    setTimeout(() => {
+      setFilterSuccess(false);
+    }, 3000);
+    ;
+    
 
     const jsonData = JSON.stringify(filters);
     fetch('/api/filters', {
@@ -102,7 +118,8 @@ function App() {
         const searchResultObjects = jsonData.map((item, index) => ({
           id: index,
           title: item.title,
-          link: item.title
+          link: item.title,
+          url: item.url
         }));
       
         // Arayüzü güncelle
@@ -119,11 +136,23 @@ function App() {
     setDateFilter("");
     setKeywordsFilter("");
     setAuthorFilter("");
+    
+  };
+  const handleSortToggle = () => {
+    // Toggle sort order
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newSortOrder);
+
   };
 
   return (
-    <div >
+    <div className='App' >
       <div >
+      {filterSuccess && (
+        <div>
+          <p>Filtreleme başarıyla uygulandı!</p>
+        </div>
+      )}
         <select value={typeFilter || ""} onChange={(e) => setTypeFilter(e.target.value)}>
           <option value="">Type</option>
           <option value="Araştırma Makalesi">Araştırma Makalesi</option>
@@ -134,7 +163,14 @@ function App() {
         <input type="text" value={dateFilter || ""} onChange={(e) => setDateFilter(e.target.value)} placeholder="Date" />
         <input type="text" value={keywordsFilter} onChange={(e) => setKeywordsFilter(e.target.value)} placeholder="Keywords" />
         <input type="text" value={authorFilter} onChange={(e) => setAuthorFilter(e.target.value)} placeholder="Author" />
+        <button onClick={handleSortToggle}>
+          {sortOrder === 'asc' ? 'Artan Sırala' : 'Azalan Sırala'}
+          {sortOrder === 'asc' ? <span>&uarr;</span> : <span>&darr;</span>}
+        </button>
         <button onClick={handleFilter}>Filtrele</button>
+       
+        
+        
       </div>
 
       <div >

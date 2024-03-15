@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom'; 
 
 const Newpage = () => {
+  
 
   interface SearchResult {
     id: number; 
@@ -14,12 +15,16 @@ const Newpage = () => {
     journal_title:string;
     keywords:Array<string>;
     summary:string;
-    references:Array<string>;
-    url:string;
+    referances:Array<string>;
+    article_url:string;
+    pdf_url:string;
+    showReferences: boolean;
+    cites:number;
   }
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const location = useLocation(); 
+  
 
   useEffect(() => {
     sendDataToServer(); 
@@ -47,6 +52,7 @@ const Newpage = () => {
         // Gelen veri bir nesne ise, onu bir diziye dönüştürebiliriz
         const dataArray = Object.keys(data).map(key => data[key]);
         setSearchResults(dataArray);
+        console.log('Response from server:', data);
       } else {
         console.error('Received data is not an array or object:', data);
       }
@@ -55,28 +61,50 @@ const Newpage = () => {
     .catch(error => {
       console.error('Error sending data:', error);
     });
+    
+  };
+  const handleReferencesClick = (data) => {
+    // data.showReferences alanını tersine çevirme
+    data.showReferences = !data.showReferences;
+    // searchResults durumunu güncelleme
+    setSearchResults([...searchResults]);
   };
 
+  
+ 
+  
   return (
     <div className="newpage">
       <ul>
         {searchResults.map((data) => (
           <li key={data.id} className="card">
+            <p className="card-text journal_title">{data.journal_title}</p>
             <div className="card-body">
               <h2 className="card-title"><a href={data.link}>{data.title}</a></h2>
-              <p className="card-text authors">Yazarlar: {data.authors.join(", ")}</p>
-              <p className="card-text date">Tarih: {data.date}</p>
+              <p className="card-text authors">{data.authors.join(", ")}</p> 
+              <p className="card-text date">{data.date}</p>
             </div>
-            <p className="card-text journal_title">Dergi: {data.journal_title}</p>
+            <p className="card-text keywords">Keywords: {data.keywords.join(", ")}</p> 
+            <p className="card-text cites">Cites: {data.cites}</p>
             <div className="card-body summary">
               {data.summary}
             </div>
-            <p className="card-text keywords">
-              {data.keywords.map((keyword) => (
-                <span key={keyword} className="badge badge-primary">{keyword}</span>
-              ))}
-            </p>
-            <a href={data.url} className="btn btn-primary">PDF URL</a>
+            
+
+            <p><a href={data.article_url} className="btn btn-primary">Article URL</a></p>
+            <a href={data.pdf_url} className="btn btn-primary">PDF URL</a>
+  
+            <p><button className="btn btn-primary" onClick={() => handleReferencesClick(data)}>References</button></p>
+            {data.showReferences && ( // data.showReferences kontrolü
+              <div className="card-body references">
+                
+                <ul>
+                  {data.referances.map((reference, index) => (
+                    <li key={index}>{reference}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </li>
         ))}
       </ul>

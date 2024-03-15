@@ -30,8 +30,10 @@ def googleScholarScraping(search_text,page):
         article_url = innerSoup.find('h3','gs_rt').find('a')['href']
         article_title = innerSoup.find('h3','gs_rt').find('a').get_text()
         
+        article_authors = []
         temptext = innerSoup.find('div','gs_a').get_text()
         article_authors = temptext.split('-')[0].strip()
+        article_authors_array = article_authors.split(',')
         
         
         article_journal = temptext.split('-')[2].strip()
@@ -47,7 +49,7 @@ def googleScholarScraping(search_text,page):
         article_summary = innerSoup.find('div','gs_rs').get_text()
         article_cites = innerSoup.find('div','gs_fl gs_flb').find_all('a')[2].get_text().split(' ')[2]
         
-        article_dict['authors'] = article_authors
+        article_dict['authors'] = article_authors_array
         article_dict['date']=article_year
         article_dict['journal_title'] =article_journal
         article_dict['_id']=article_title
@@ -56,7 +58,8 @@ def googleScholarScraping(search_text,page):
         article_dict['summary'] = article_summary
         article_dict['pdf_url'] = pdf_url
         article_dict['article_url'] = article_url
-        
+        article_dict['keywords'] = []
+        article_dict['referances'] = []
         try:
             print("\ngoogle'dan kaydedildi\n")
             print(article_dict)

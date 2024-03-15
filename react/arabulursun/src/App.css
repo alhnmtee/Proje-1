@@ -23,8 +23,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
-  background-color: #282c34;
-  color: #fff;
+  /* background-color: #282c34; */
+  background-image: url('/react/arabulursun/public/logo.png'); 
+  background-size: contain; 
+  background-position: center;
+  
 }
 
 

@@ -9,7 +9,7 @@ def run_elasticsearch_query(filter_data):
    
     es = Elasticsearch('http://localhost:9200')
 
-    
+
     query = {
         "query": {
             "bool": {

@@ -58,14 +58,14 @@ result = es.search(index='your_elasticsearch_index', body={
    "size": 300
 })
 
-# URL'leri almak için döngü
+
 titles = [hit['_source']['title'] for hit in result['hits']['hits']]
 #for title in titles:
     #print(title)   
-
-# response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
-# # Silinen belgelerin sayısını yazdırın
-# print("Silinen Belgelerin Sayısı:", response['deleted'])
+#from elasticsearch import Elasticsearch
+#es = Elasticsearch('http://localhost:9200')
+#response = es.delete_by_query(index='your_elasticsearch_index', body={"query": {"match_all": {}}})
+#print("Silinen Belgelerin Sayısı:", response['deleted'])
 
 #Sonuçları yazdırın
 # print("Arama Sonuçları:")

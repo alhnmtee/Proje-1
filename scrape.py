@@ -4,7 +4,6 @@ import requests
 import pymongo
 from bs4 import BeautifulSoup
 from elasticsearch import Elasticsearch
-#TODO ElasticSearch araştırdım bi hesap açtım güya bir şeyler denedim ama sync aşaması hata verdi tamamlayamadım.Yapamadım
 
 
 client = pymongo.MongoClient("mongodb+srv://yazlab:yazlab@cluster0.ier7hbc.mongodb.net/")
@@ -15,7 +14,13 @@ es = Elasticsearch('http://localhost:9200')
 
 
 def save_to_mongodb(article_dict):
-    # MongoDB'ye kaydet
+    try:
+        response = requests.get(article_dict['pdf_url'])
+        pdf = open("pdfs/"+article_dict['_id']+".pdf", 'wb')
+        pdf.write(response.content)
+        pdf.close()
+    except:
+        pass
     collection.insert_one(article_dict)
     
 
@@ -110,7 +115,6 @@ def dergiParkScraping(search_text,page):
        # if title_element and len(title_element.get_text().strip()) > 2:
          #   article_dict['title'] = title_element.get_text().strip()
 
-        # Yazarları al
         article_authors = []
         try:
             for author in linksoup.find('p', 'article-authors').find_all('a'):
@@ -129,7 +133,7 @@ def dergiParkScraping(search_text,page):
         #article_journal_title = linksoup.find('h1',id='journal-title').get_text().strip()
         article_dict['journal_title'] =linksoup.find('h1',id='journal-title').get_text().strip()
         
-        article_dict['_id']=linksoup.find('h1',id='journal-title').get_text().strip()
+        article_dict['_id']=article_title
         
         article_keywords = []
         try:
@@ -169,16 +173,11 @@ def dergiParkScraping(search_text,page):
         except:
             print("referans yok")
             
-        #TODO yayın id ve alıntı sayısı doi numarası filan bunlar nolucak ? ve bunşarı veri tabanına atmak lazım
-        #TODO article_citation_count = ??
-        
         article_url = 'https://dergipark.org.tr' + linksoup.find('div',id = 'article-toolbar').find('a')['href']
         article_dict['pdf_url'] = article_url
         article_dict['article_url'] = link
 
 
-        
-        #print("*** ***" + str(article_dict['summary']))
         try:
             save_to_mongodb(article_dict)
         except:

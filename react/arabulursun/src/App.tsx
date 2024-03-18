@@ -114,7 +114,6 @@ function App() {
         return response.json();
       })
       .then(jsonData => {
-        // Veriyi işle ve uygun yapıya dönüştür
         const searchResultObjects = jsonData.map((item, index) => ({
           id: index,
           title: item.title,
@@ -122,7 +121,6 @@ function App() {
           url: item.url
         }));
       
-        // Arayüzü güncelle
         setSearchResults(searchResultObjects);
         console.log('Response from server:3', jsonData);
       })

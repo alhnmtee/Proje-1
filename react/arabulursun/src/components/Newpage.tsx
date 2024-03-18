@@ -47,9 +47,8 @@ const Newpage = () => {
     .then(data => {
       console.log('Response from server:', data);
       if (Array.isArray(data)) {
-        setSearchResults(data); // Gelen veri zaten bir dizi ise, direkt olarak kullanabiliriz
+        setSearchResults(data); 
       } else if (typeof data === 'object' && data !== null) {
-        // Gelen veri bir nesne ise, onu bir diziye dönüştürebiliriz
         const dataArray = Object.keys(data).map(key => data[key]);
         setSearchResults(dataArray);
         console.log('Response from server:', data);
@@ -64,9 +63,7 @@ const Newpage = () => {
     
   };
   const handleReferencesClick = (data) => {
-    // data.showReferences alanını tersine çevirme
     data.showReferences = !data.showReferences;
-    // searchResults durumunu güncelleme
     setSearchResults([...searchResults]);
   };
 
@@ -93,7 +90,7 @@ const Newpage = () => {
 
             <p><a href={data.article_url} className="btn btn-primary">Article URL</a></p>
             <a href={data.pdf_url} className="btn btn-primary">PDF URL</a>
-  
+            <a href={"..../pdfs"+data.id} download className="btn btn-primary">PDF İndir</a>
             <p><button className="btn btn-primary" onClick={() => handleReferencesClick(data)}>References</button></p>
             {data.showReferences && ( // data.showReferences kontrolü
               <div className="card-body references">

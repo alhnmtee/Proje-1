@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'; 
 
+
 const Newpage = () => {
   
 
@@ -37,6 +38,7 @@ const Newpage = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ text: location.pathname }),
+
     })
     .then(response => {
       if (!response.ok) {
@@ -67,7 +69,19 @@ const Newpage = () => {
     setSearchResults([...searchResults]);
   };
 
-  
+const downloadPDF = async (pdfUrl: string) => {
+    try {
+      const pdf_url  = "../public/"+pdfUrl+".pdf";
+      const link = document.createElement('a');
+      link.href = pdf_url;
+      link.download = pdfUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
+  };
  
   
   return (
@@ -90,13 +104,14 @@ const Newpage = () => {
 
             <p><a href={data.article_url} className="btn btn-primary">Article URL</a></p>
             <a href={data.pdf_url} className="btn btn-primary">PDF URL</a>
-            <a href={"..../pdfs"+data.id} download className="btn btn-primary">PDF İndir</a>
+           
+            <p><button className="btn btn-primary" onClick={() => downloadPDF(data.title)}>PDF indir</button></p>
             <p><button className="btn btn-primary" onClick={() => handleReferencesClick(data)}>References</button></p>
             {data.showReferences && ( // data.showReferences kontrolü
               <div className="card-body references">
                 
                 <ul>
-                  {data.referances.map((reference, index) => (
+                  {data.referances?.map((reference, index) => (
                     <li key={index}>{reference}</li>
                   ))}
                 </ul>

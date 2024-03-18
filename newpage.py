@@ -21,7 +21,7 @@ def get_newpage_data(filter_data):
 })
     bilgi = result['hits']['hits'][0]['_source']
     
-    #print("Elasticsearch sorgusu sonucu:", result)
+    print("Elasticsearch sorgusu sonucu:", result)
     return bilgi
 
 

@@ -16,7 +16,7 @@ es = Elasticsearch('http://localhost:9200')
 def save_to_mongodb(article_dict):
     try:
         response = requests.get(article_dict['pdf_url'])
-        pdf = open("pdfs/"+article_dict['_id']+".pdf", 'wb')
+        pdf = open("react/arabulursun/public/"+article_dict['_id']+".pdf", 'wb')
         pdf.write(response.content)
         pdf.close()
     except:
